@@ -1,9 +1,10 @@
 require("dotenv").config();
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import express from "express";
 export const app = express();
 interface MyCustomData {
   message: string;
+  success: boolean;
 }
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -23,10 +24,20 @@ app.use(
 
 // testing api
 
-app.get("/test", (req: Request, res: Response<MyCustomData>) => {
-  const responseData: MyCustomData = {
-    message: "Hello, TypeScript with Express!",
-  };
+app.get(
+  "/test",
+  (req: Request, res: Response<MyCustomData>, next: NextFunction) => {
+    const responseData: MyCustomData = {
+      success: true,
+      message: "Hello, TypeScript with Express!",
+    };
+    res.status(200).json(responseData);
+  }
+);
 
-  res.json(responseData);
+// unknown route
+app.all("*", (req: Request, res: Response, next: NextFunction) => {
+  const err = new Error(`Route ${req.originalUrl} not found`) as any;
+  err.statusCode = 404;
+  next(err);
 });
