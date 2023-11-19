@@ -1,6 +1,7 @@
 require("dotenv").config();
 import { Request, Response, NextFunction } from "express";
 import express from "express";
+import { ErrorMiddleware } from "./middleware/error";
 export const app = express();
 interface MyCustomData {
   message: string;
@@ -41,3 +42,6 @@ app.all("*", (req: Request, res: Response, next: NextFunction) => {
   err.statusCode = 404;
   next(err);
 });
+
+
+app.use(ErrorMiddleware)
