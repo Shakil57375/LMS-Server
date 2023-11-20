@@ -16,7 +16,7 @@ export const ErrorMiddleware = (
     err = new ErrorHandler(message, 400);
   }
 
-  // Duplicate key error
+  // Duplicate key error 
 
   if (err.code === 11000) {
     const message = `Duplicate ${Object.keys(err.keyValue)} entered`;
